@@ -1,7 +1,9 @@
 package coursera.project.dailyselfie;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,6 +11,7 @@ import android.view.MenuItem;
 public class DailySelfieActivity extends Activity {
 
     private static final String TAG = "DAILY_SELFIE";
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +35,19 @@ public class DailySelfieActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.take_picture) {
-            openCameraApplication();
+            dispatchTakePictureIntent();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    protected void openCameraApplication() {
-        Log.d(TAG, "Open Camera Application");
+    protected void dispatchTakePictureIntent() {
+        Log.d(TAG, "Dispatched Take Picture Intent...");
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            Log.d(TAG, "...found an application that can handle Take Picture Intent");
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
     }
 }
