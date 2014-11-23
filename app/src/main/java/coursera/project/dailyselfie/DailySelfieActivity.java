@@ -2,18 +2,19 @@ package coursera.project.dailyselfie;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
 public class DailySelfieActivity extends Activity {
+
+    private static final String TAG = "DAILY_SELFIE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_selfie);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -30,10 +31,15 @@ public class DailySelfieActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.take_picture) {
+            openCameraApplication();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void openCameraApplication() {
+        Log.d(TAG, "Open Camera Application");
     }
 }
