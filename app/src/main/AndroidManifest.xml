@@ -21,4 +21,7 @@
     <!-- Camera Permissions -->
     <uses-feature android:name="android.hardware.Camera"
         android:required="true" />
+
+    <!-- Read permission explicit with write capabilities -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 </manifest>
