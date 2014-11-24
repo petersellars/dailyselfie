@@ -2,21 +2,27 @@ package coursera.project.dailyselfie;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 public class DailySelfieActivity extends Activity {
 
     private static final String TAG = "DAILY_SELFIE";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
+    private ImageView thumbnail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_selfie);
+
+        thumbnail = (ImageView) findViewById(R.id.thumbnail);
     }
 
     @Override
@@ -24,6 +30,17 @@ public class DailySelfieActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_daily_selfie, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Log.d(TAG, "Photo taken successfully...");
+            // Bitmap image is passed back in extras under the 'data' key
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            thumbnail.setImageBitmap(imageBitmap);
+        }
     }
 
     @Override
