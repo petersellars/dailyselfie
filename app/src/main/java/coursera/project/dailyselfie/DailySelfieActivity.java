@@ -1,7 +1,11 @@
 package coursera.project.dailyselfie;
 
-import android.app.Activity;
+import android.app.ListActivity;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -9,9 +13,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.SimpleCursorAdapter;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,11 +30,26 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DailySelfieActivity extends Activity {
+public class DailySelfieActivity extends ListActivity
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = "DAILY_SELFIE";
     private static final int REQUEST_TAKE_PHOTO = 1;
     private static final int THUMBNAIL_SIZE = 100;
+
+    // This is the Adapter being used to display the list's data
+    SimpleCursorAdapter cursorAdapter;
+
+    // These are the files that we will retrieve
+    static final String[] PROJECTION = new String[] {MediaStore.Images.Media.DATA};
+/*            {ContactsContract.Data._ID,
+            ContactsContract.Data.DISPLAY_NAME};*/
+
+    // This is the select criteria
+    static final String SELECTION = "";
+/*            "((" +
+            ContactsContract.Data.DISPLAY_NAME + " NOTNULL) AND (" +
+            ContactsContract.Data.DISPLAY_NAME + " != '' ))";*/
 
     private ImageView thumbnail;
     private String currentPhotoPath;
@@ -33,7 +59,33 @@ public class DailySelfieActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_selfie);
 
-        thumbnail = (ImageView) findViewById(R.id.thumbnail);
+        // Create a progress bar to display while the list loads
+        ProgressBar progressBar = new ProgressBar(this);
+        progressBar.setLayoutParams(new AbsListView.LayoutParams(
+                AbsListView.LayoutParams.WRAP_CONTENT,
+                AbsListView.LayoutParams.WRAP_CONTENT,
+                Gravity.CENTER));
+        progressBar.setIndeterminate(true);
+        getListView().setEmptyView(progressBar);
+
+        // Must add the progress bar to the root of the layout
+        ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
+        root.addView(progressBar);
+
+        // For the cursor adapter, specify which columns go into which views
+        String[] fromColumns = {}; //{ContactsContract.Data.DISPLAY_NAME};
+        int[] toViews = {R.id.photo_filename}; // The TextView in simple_list_item_1
+
+        // Create an empty adapter we will use to display the loaded data.
+        // We pass null for the cursor, then update it in onLoadFinished()
+        cursorAdapter = new SimpleCursorAdapter(this,
+                R.layout.photo_thumbnail_list, null,
+                fromColumns, toViews, 0);
+        setListAdapter(cursorAdapter);
+
+        // Prepare the loader.  Either re-connect with an existing one,
+        // or start a new one.
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -45,11 +97,13 @@ public class DailySelfieActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Log.d(TAG, "Photo taken successfully...");
             Log.d(TAG, "Current Photo Path: " + currentPhotoPath);
-            Bitmap imageBitmap = getPreview(URI.create(currentPhotoPath));
-            thumbnail.setImageBitmap(imageBitmap);
+            Log.d(TAG, "Data: " + data);
+            //Bitmap imageBitmap = getPreview(URI.create(currentPhotoPath));
+            //thumbnail.setImageBitmap(imageBitmap);
         }
     }
 
@@ -67,6 +121,35 @@ public class DailySelfieActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        // Do something when a list item is clicked
+    }
+
+    // Called when a new Loader needs to be created
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // Now create and return a CursorLoader that will take care of
+        // creating a Cursor for the data being displayed.
+        //return new CursorLoader(this, ContactsContract.Data.CONTENT_URI,
+        //        PROJECTION, SELECTION, null, null);
+        return null;
+    }
+
+    // Called when a previously created loader has finished loading
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // Swap the new cursor in.  (The framework will take care of closing the
+        // old cursor once we return.)
+        cursorAdapter.swapCursor(data);
+    }
+
+    // Called when a previously created loader is reset, making the data unavailable
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // This is called when the last Cursor provided to onLoadFinished()
+        // above is about to be closed.  We need to make sure we are no
+        // longer using it.
+        cursorAdapter.swapCursor(null);
     }
 
     protected void dispatchTakePictureIntent() {
