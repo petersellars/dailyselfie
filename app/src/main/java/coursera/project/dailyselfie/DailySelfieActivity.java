@@ -76,7 +76,8 @@ public class DailySelfieActivity extends ListActivity {
             Log.d(TAG, "Photo taken successfully...");
             Log.d(TAG, "Current Photo Path: " + currentPhotoPath);
             Log.d(TAG, "Data: " + data);
-            //Bitmap imageBitmap = getPreview(URI.create(currentPhotoPath));
+            Bitmap imageBitmap = getPreview(URI.create(currentPhotoPath));
+            dailySelfieAdapter.add(new DailySelfie(currentPhotoPath, imageBitmap));
             //thumbnail.setImageBitmap(imageBitmap);
         }
     }
