@@ -30,28 +30,14 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DailySelfieActivity extends ListActivity
-        implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DailySelfieActivity extends ListActivity {
 
     private static final String TAG = "DAILY_SELFIE";
     private static final int REQUEST_TAKE_PHOTO = 1;
     private static final int THUMBNAIL_SIZE = 100;
 
-    // This is the Adapter being used to display the list's data
-    SimpleCursorAdapter cursorAdapter;
+    private DailySelfieAdapter dailySelfieAdapter;
 
-    // These are the files that we will retrieve
-    static final String[] PROJECTION = new String[] {MediaStore.Images.Media.DATA};
-/*            {ContactsContract.Data._ID,
-            ContactsContract.Data.DISPLAY_NAME};*/
-
-    // This is the select criteria
-    static final String SELECTION = "";
-/*            "((" +
-            ContactsContract.Data.DISPLAY_NAME + " NOTNULL) AND (" +
-            ContactsContract.Data.DISPLAY_NAME + " != '' ))";*/
-
-    private ImageView thumbnail;
     private String currentPhotoPath;
 
     @Override
@@ -72,20 +58,8 @@ public class DailySelfieActivity extends ListActivity
         ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
         root.addView(progressBar);
 
-        // For the cursor adapter, specify which columns go into which views
-        String[] fromColumns = {}; //{ContactsContract.Data.DISPLAY_NAME};
-        int[] toViews = {R.id.photo_filename}; // The TextView in simple_list_item_1
-
-        // Create an empty adapter we will use to display the loaded data.
-        // We pass null for the cursor, then update it in onLoadFinished()
-        cursorAdapter = new SimpleCursorAdapter(this,
-                R.layout.photo_thumbnail_list, null,
-                fromColumns, toViews, 0);
-        setListAdapter(cursorAdapter);
-
-        // Prepare the loader.  Either re-connect with an existing one,
-        // or start a new one.
-        getLoaderManager().initLoader(0, null, this);
+        dailySelfieAdapter = new DailySelfieAdapter(getApplicationContext());
+        setListAdapter(dailySelfieAdapter);
     }
 
     @Override
@@ -126,30 +100,6 @@ public class DailySelfieActivity extends ListActivity
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         // Do something when a list item is clicked
-    }
-
-    // Called when a new Loader needs to be created
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        // Now create and return a CursorLoader that will take care of
-        // creating a Cursor for the data being displayed.
-        //return new CursorLoader(this, ContactsContract.Data.CONTENT_URI,
-        //        PROJECTION, SELECTION, null, null);
-        return null;
-    }
-
-    // Called when a previously created loader has finished loading
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // Swap the new cursor in.  (The framework will take care of closing the
-        // old cursor once we return.)
-        cursorAdapter.swapCursor(data);
-    }
-
-    // Called when a previously created loader is reset, making the data unavailable
-    public void onLoaderReset(Loader<Cursor> loader) {
-        // This is called when the last Cursor provided to onLoadFinished()
-        // above is about to be closed.  We need to make sure we are no
-        // longer using it.
-        cursorAdapter.swapCursor(null);
     }
 
     protected void dispatchTakePictureIntent() {
