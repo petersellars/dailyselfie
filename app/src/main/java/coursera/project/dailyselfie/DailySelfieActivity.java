@@ -20,7 +20,6 @@ public class DailySelfieActivity extends ListActivity {
 
     private static final String TAG = "DAILY_SELFIE";
     private static final int REQUEST_TAKE_PHOTO = 1;
-    private static final int THUMBNAIL_SIZE = 100;
 
     private DailySelfieAdapter dailySelfieAdapter;
 
@@ -78,8 +77,13 @@ public class DailySelfieActivity extends ListActivity {
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
+    public void onListItemClick(ListView listView, View view, int position, long id) {
         // Do something when a list item is clicked
+        Intent showSelfieIntent = new Intent(this, SelfieActivity.class);
+        DailySelfie theSelfie = (DailySelfie) dailySelfieAdapter.getItem(position);
+        Log.d(TAG, "Selfie to show: " + theSelfie.getFileUrl());
+        showSelfieIntent.putExtra("selfieURL", theSelfie.getFileUrl());
+        startActivity(showSelfieIntent);
     }
 
     protected void dispatchTakePictureIntent() {
