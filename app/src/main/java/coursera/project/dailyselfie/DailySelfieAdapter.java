@@ -2,6 +2,9 @@ package coursera.project.dailyselfie;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +12,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 
 /**
  * Created by Peter on 25/11/2014.
  */
 public class DailySelfieAdapter extends BaseAdapter {
+
+    private static final int THUMBNAIL_SIZE = 100;
 
     private ArrayList<DailySelfie> list = new ArrayList<DailySelfie>();
     private static LayoutInflater inflater = null;
@@ -55,7 +62,7 @@ public class DailySelfieAdapter extends BaseAdapter {
             holder = (ViewHolder) newView.getTag();
         }
 
-        holder.thumbnail.setImageBitmap(curr.getSelfie());
+        holder.thumbnail.setImageBitmap(getPreview(URI.create(curr.getFileUrl())));
         holder.filename.setText(curr.getFileUrl());
 
         return newView;
@@ -73,6 +80,30 @@ public class DailySelfieAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void addAllViews() {
+        list.addAll(getFileList());
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<DailySelfie> getFileList() {
+        ArrayList<DailySelfie> dailySelfieList = new ArrayList<DailySelfie>();
+        String path = Environment.getExternalStorageDirectory().toString();
+        Log.d("Files", "Path: " + path);
+        File f = new File(path);
+        File file[] = f.listFiles();
+        Log.d("Files", "Size: "+ file.length);
+        for (int i=0; i < file.length; i++)
+        {
+            Log.d("Files", "Is selfie: " + file[i].getName().startsWith("Selfie_"));
+            if (file[i].getName().startsWith("Selfie_"))
+            {
+                Log.d("Files", "FileName:" + file[i].getName());
+                dailySelfieList.add(new DailySelfie("file:" + path + "/" + file[i].getName()));
+            }
+        }
+        return dailySelfieList;
+    }
+
     public ArrayList<DailySelfie> getList(){
         return list;
     }
@@ -80,5 +111,22 @@ public class DailySelfieAdapter extends BaseAdapter {
     public void removeAllViews(){
         list.clear();
         this.notifyDataSetChanged();
+    }
+
+    private Bitmap getPreview(URI uri) {
+        File image = new File(uri);
+
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(image.getPath(), bounds);
+        if ((bounds.outWidth == -1) || (bounds.outHeight == -1))
+            return null;
+
+        int originalSize = (bounds.outHeight > bounds.outWidth) ? bounds.outHeight
+                : bounds.outWidth;
+
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inSampleSize = originalSize / THUMBNAIL_SIZE;
+        return BitmapFactory.decodeFile(image.getPath(), opts);
     }
 }

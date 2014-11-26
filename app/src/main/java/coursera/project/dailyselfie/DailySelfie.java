@@ -8,26 +8,12 @@ import android.graphics.Bitmap;
 public class DailySelfie {
 
     private String fileUrl;
-    private Bitmap selfie;
 
-    public DailySelfie(String fileUrl, Bitmap selfie) {
+    public DailySelfie(String fileUrl) {
         this.fileUrl = fileUrl;
-        this.selfie = selfie;
-    }
-
-    public DailySelfie(Bitmap selfie) {
-        this.selfie = selfie;
     }
 
     public DailySelfie() {
-    }
-
-    public Bitmap getSelfie() {
-        return selfie;
-    }
-
-    public void setSelfie(Bitmap selfie) {
-        this.selfie = selfie;
     }
 
     public String getFileUrl() {

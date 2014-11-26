@@ -45,21 +45,15 @@ public class DailySelfieActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_selfie);
 
-        // Create a progress bar to display while the list loads
-        ProgressBar progressBar = new ProgressBar(this);
-        progressBar.setLayoutParams(new AbsListView.LayoutParams(
-                AbsListView.LayoutParams.WRAP_CONTENT,
-                AbsListView.LayoutParams.WRAP_CONTENT,
-                Gravity.CENTER));
-        progressBar.setIndeterminate(true);
-        getListView().setEmptyView(progressBar);
-
-        // Must add the progress bar to the root of the layout
-        ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
-        root.addView(progressBar);
-
         dailySelfieAdapter = new DailySelfieAdapter(getApplicationContext());
+        dailySelfieAdapter.addAllViews();
         setListAdapter(dailySelfieAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dailySelfieAdapter.addAllViews();
     }
 
     @Override
@@ -75,9 +69,8 @@ public class DailySelfieActivity extends ListActivity {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Log.d(TAG, "Photo taken successfully...");
             Log.d(TAG, "Current Photo Path: " + currentPhotoPath);
-            Log.d(TAG, "Data: " + data);
-            Bitmap imageBitmap = getPreview(URI.create(currentPhotoPath));
-            dailySelfieAdapter.add(new DailySelfie(currentPhotoPath, imageBitmap));
+            //Bitmap imageBitmap = getPreview(URI.create(currentPhotoPath));
+            dailySelfieAdapter.add(new DailySelfie(currentPhotoPath));
             //thumbnail.setImageBitmap(imageBitmap);
         }
     }
@@ -140,22 +133,5 @@ public class DailySelfieActivity extends ListActivity {
         currentPhotoPath = "file:" + image.getAbsolutePath();
         Log.d(TAG, "Current Photo Path: " + currentPhotoPath);
         return image;
-    }
-
-    private Bitmap getPreview(URI uri) {
-        File image = new File(uri);
-
-        BitmapFactory.Options bounds = new BitmapFactory.Options();
-        bounds.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(image.getPath(), bounds);
-        if ((bounds.outWidth == -1) || (bounds.outHeight == -1))
-            return null;
-
-        int originalSize = (bounds.outHeight > bounds.outWidth) ? bounds.outHeight
-                : bounds.outWidth;
-
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inSampleSize = originalSize / THUMBNAIL_SIZE;
-        return BitmapFactory.decodeFile(image.getPath(), opts);
     }
 }
