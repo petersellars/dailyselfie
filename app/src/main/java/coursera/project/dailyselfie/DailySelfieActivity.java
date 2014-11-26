@@ -1,32 +1,18 @@
 package coursera.project.dailyselfie;
 
 import android.app.ListActivity;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.SimpleCursorAdapter;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -50,11 +36,11 @@ public class DailySelfieActivity extends ListActivity {
         setListAdapter(dailySelfieAdapter);
     }
 
-    @Override
+/*    @Override
     protected void onResume() {
         super.onResume();
-        dailySelfieAdapter.addAllViews();
-    }
+        // dailySelfieAdapter.addAllViews();
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -122,7 +108,7 @@ public class DailySelfieActivity extends ListActivity {
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "Selfie_" + timestamp + "_";
         File storageDirectory =
-                Environment.getExternalStorageDirectory();
+                this.getExternalFilesDir(null);
         File image = File.createTempFile(
                 imageFileName,      /* prefix */
                 ".jpg",             /* suffix */

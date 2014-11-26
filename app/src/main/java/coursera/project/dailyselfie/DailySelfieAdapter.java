@@ -87,7 +87,7 @@ public class DailySelfieAdapter extends BaseAdapter {
 
     public ArrayList<DailySelfie> getFileList() {
         ArrayList<DailySelfie> dailySelfieList = new ArrayList<DailySelfie>();
-        String path = Environment.getExternalStorageDirectory().toString();
+        String path = context.getExternalFilesDir(null).toString();
         Log.d("Files", "Path: " + path);
         File f = new File(path);
         File file[] = f.listFiles();

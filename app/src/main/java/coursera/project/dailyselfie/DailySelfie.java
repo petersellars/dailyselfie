@@ -1,7 +1,5 @@
 package coursera.project.dailyselfie;
 
-import android.graphics.Bitmap;
-
 /**
  * Created by Peter on 25/11/2014.
  */
