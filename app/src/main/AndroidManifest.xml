@@ -32,6 +32,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="coursera.project.dailyselfie.DailySelfieActivity" />
         </activity>
+        <receiver android:name=".SelfieAlarmNotificationReceiver"/>
     </application>
 
 </manifest>

@@ -1,9 +1,12 @@
 package coursera.project.dailyselfie;
 
+import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -20,7 +23,12 @@ public class DailySelfieActivity extends ListActivity {
 
     private static final String TAG = "DAILY_SELFIE";
     private static final int REQUEST_TAKE_PHOTO = 1;
+    private static final long SELFIE_INTERVAL_TWO_MINUTES = 2 * 60 * 1000;
+    private static final long INITIAL_ALARM_DELAY = SELFIE_INTERVAL_TWO_MINUTES;
 
+    private AlarmManager alarmManager;
+    private Intent selfieNotificationReceiverIntent;
+    private PendingIntent selfieNotificationReceiverPendingIntent;
     private DailySelfieAdapter dailySelfieAdapter;
 
     private String currentPhotoPath;
@@ -29,6 +37,15 @@ public class DailySelfieActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_selfie);
+
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        selfieNotificationReceiverIntent = new Intent(DailySelfieActivity.this,
+                SelfieAlarmNotificationReceiver.class);
+        selfieNotificationReceiverPendingIntent = PendingIntent.getBroadcast(
+                DailySelfieActivity.this, 0, selfieNotificationReceiverIntent, 0);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
+                SystemClock.elapsedRealtime() + INITIAL_ALARM_DELAY,
+                SELFIE_INTERVAL_TWO_MINUTES, selfieNotificationReceiverPendingIntent);
 
         dailySelfieAdapter = new DailySelfieAdapter(getApplicationContext());
         dailySelfieAdapter.addAllViews();
