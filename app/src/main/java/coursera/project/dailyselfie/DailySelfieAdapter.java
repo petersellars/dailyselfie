@@ -68,6 +68,7 @@ public class DailySelfieAdapter extends BaseAdapter {
                 selfieFilename.replace(context.getExternalFilesDir(null).toString(),"");
         selfieFilename = selfieFilename.replace(".jpg","");
         selfieFilename = selfieFilename.replace("file:/Selfie_","");
+        selfieFilename = selfieFilename.substring(0, selfieFilename.lastIndexOf("_"));
         holder.filename.setText(selfieFilename);
 
         return newView;

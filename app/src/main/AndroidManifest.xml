@@ -27,7 +27,7 @@
         </activity>
         <activity
             android:name="coursera.project.dailyselfie.SelfieActivity"
-            android:label="@string/title_activity_selfie"
+            android:label="@string/app_name"
             android:parentActivityName="coursera.project.dailyselfie.DailySelfieActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
