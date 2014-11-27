@@ -54,9 +54,7 @@ public class DailySelfieActivity extends ListActivity {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Log.d(TAG, "Photo taken successfully...");
             Log.d(TAG, "Current Photo Path: " + currentPhotoPath);
-            //Bitmap imageBitmap = getPreview(URI.create(currentPhotoPath));
             dailySelfieAdapter.add(new DailySelfie(currentPhotoPath));
-            //thumbnail.setImageBitmap(imageBitmap);
         }
     }
 

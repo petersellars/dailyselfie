@@ -63,7 +63,12 @@ public class DailySelfieAdapter extends BaseAdapter {
         }
 
         holder.thumbnail.setImageBitmap(getPreview(URI.create(curr.getFileUrl())));
-        holder.filename.setText(curr.getFileUrl());
+        String selfieFilename = curr.getFileUrl();
+        selfieFilename =
+                selfieFilename.replace(context.getExternalFilesDir(null).toString(),"");
+        selfieFilename = selfieFilename.replace(".jpg","");
+        selfieFilename = selfieFilename.replace("file:/Selfie_","");
+        holder.filename.setText(selfieFilename);
 
         return newView;
     }
