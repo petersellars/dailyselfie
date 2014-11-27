@@ -72,7 +72,6 @@ public class DailySelfieActivity extends ListActivity {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Log.d(TAG, "Photo taken successfully...");
             Log.d(TAG, "Current Photo Path: " + currentPhotoPath);
-            Log.d(TAG, "" + (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE));
             dailySelfieAdapter.add(new DailySelfie(currentPhotoPath));
         }
     }
