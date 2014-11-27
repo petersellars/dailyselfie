@@ -3,7 +3,7 @@
     tools:context=".DailySelfieActivity">
     <item
         android:id="@+id/take_picture"
-        android:icon="@drawable/ic_menu_camera"
+        android:icon="@android:drawable/ic_menu_camera"
         android:title="@string/take_picture"
         android:showAsAction="ifRoom" />
 </menu>

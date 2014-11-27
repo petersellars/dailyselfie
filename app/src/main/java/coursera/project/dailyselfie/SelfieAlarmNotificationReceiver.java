@@ -21,8 +21,8 @@ public class SelfieAlarmNotificationReceiver extends BroadcastReceiver {
 
     // Notification Text Elements
     private final CharSequence tickerText = "Daily Selfie Time!";
-    private final CharSequence contentTitle = "Daily Selfie Reminder";
-    private final CharSequence contentText = "Take a Selfie!!";
+    private final CharSequence contentTitle = "Daily Selfie";
+    private final CharSequence contentText = "Time for another selfie";
 
     // Notification Action Elements
     private Intent selfieNotificationIntent;

@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.ListActivity;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -71,6 +72,7 @@ public class DailySelfieActivity extends ListActivity {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Log.d(TAG, "Photo taken successfully...");
             Log.d(TAG, "Current Photo Path: " + currentPhotoPath);
+            Log.d(TAG, "" + (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE));
             dailySelfieAdapter.add(new DailySelfie(currentPhotoPath));
         }
     }
