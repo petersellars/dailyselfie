@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.ListActivity;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -49,7 +48,7 @@ public class DailySelfieActivity extends ListActivity {
                 SELFIE_INTERVAL_TWO_MINUTES, selfieNotificationReceiverPendingIntent);
 
         dailySelfieAdapter = new DailySelfieAdapter(getApplicationContext());
-        dailySelfieAdapter.addAllViews();
+        //dailySelfieAdapter.addAllViews();
         setListAdapter(dailySelfieAdapter);
     }
 

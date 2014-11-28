@@ -1,6 +1,7 @@
 package coursera.project.dailyselfie;
 
 import android.app.Activity;
+import android.content.Context;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 
+import java.io.File;
 import java.io.IOException;
 
 public class SelfieActivity extends Activity {
@@ -22,11 +24,6 @@ public class SelfieActivity extends Activity {
         ImageView selfieView = (ImageView) findViewById(R.id.daily_selfie);
 
         try {
-
-            ExifInterface exif = new ExifInterface(selfieURL);
-            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-            Log.d("Selfie", "Orientation: " + orientation);
-
             selfieView.setImageBitmap(
                 MediaStore.Images.Media.getBitmap(
                     this.getContentResolver(), Uri.parse(selfieURL)));
@@ -34,4 +31,5 @@ public class SelfieActivity extends Activity {
             Log.d("Selfie", "Issue displaying selfie!");
         }
     }
+
 }
