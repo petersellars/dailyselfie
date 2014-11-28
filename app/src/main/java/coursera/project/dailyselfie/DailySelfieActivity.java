@@ -48,7 +48,7 @@ public class DailySelfieActivity extends ListActivity {
                 SELFIE_INTERVAL_TWO_MINUTES, selfieNotificationReceiverPendingIntent);
 
         dailySelfieAdapter = new DailySelfieAdapter(getApplicationContext());
-        //dailySelfieAdapter.addAllViews();
+        dailySelfieAdapter.addAllViews();
         setListAdapter(dailySelfieAdapter);
     }
 

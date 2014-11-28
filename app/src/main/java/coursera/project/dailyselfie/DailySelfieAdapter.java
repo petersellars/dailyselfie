@@ -93,18 +93,18 @@ public class DailySelfieAdapter extends BaseAdapter {
 
     public ArrayList<DailySelfie> getFileList() {
         ArrayList<DailySelfie> dailySelfieList = new ArrayList<DailySelfie>();
-        String path = context.getExternalFilesDir(null).toString();
-        Log.d("Files", "Path: " + path);
-        File f = new File(path);
-        File file[] = f.listFiles();
-        Log.d("Files", "Size: "+ file.length);
-        for (int i=0; i < file.length; i++)
-        {
-            Log.d("Files", "Is selfie: " + file[i].getName().startsWith("Selfie_"));
-            if (file[i].getName().startsWith("Selfie_"))
-            {
-                Log.d("Files", "FileName:" + file[i].getName());
-                dailySelfieList.add(new DailySelfie("file:" + path + "/" + file[i].getName()));
+        if (context.getExternalFilesDir(null) != null) {
+            String path = context.getExternalFilesDir(null).toString();
+            Log.d("Files", "Path: " + path);
+            File f = new File(path);
+            File file[] = f.listFiles();
+            Log.d("Files", "Size: " + file.length);
+            for (int i = 0; i < file.length; i++) {
+                Log.d("Files", "Is selfie: " + file[i].getName().startsWith("Selfie_"));
+                if (file[i].getName().startsWith("Selfie_")) {
+                    Log.d("Files", "FileName:" + file[i].getName());
+                    dailySelfieList.add(new DailySelfie("file:" + path + "/" + file[i].getName()));
+                }
             }
         }
         return dailySelfieList;
